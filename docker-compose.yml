@@ -1,0 +1,23 @@
+services:
+  codescene:
+    image: codescene/codescene:latest
+    container_name: codescene
+    ports:
+      - "3003:3003"
+    volumes:
+      - codescene:/codescene
+      - ./local_repos:/codescene/local_clones
+    environment:
+      CODESCENE_IN_DOCKER: "true"
+      CODESCENE_DB_PATH: /codescene/codescene
+      CODESCENE_ANALYSIS_RESULTS_ROOT: /codescene/analysis
+      CODESCENE_CLONED_REPOSITORIES_ROOT: /codescene/repos
+      CODESCENE_CODE_COVERAGE_DATA_DIR: /codescene/code-coverage-data
+      DIAGNOSTICS_DIR: /codescene/diagnostics
+      CODESCENE_TIMEZONE: UTC
+      HOST_CLONED_REPOSITORIES_ROOT: /codescene/local_clones
+      LOCAL_CLONED_REPOSITORIES_ROOT: /codescene/local_clones
+    restart: unless-stopped
+
+volumes:
+  codescene:

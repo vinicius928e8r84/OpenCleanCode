@@ -1,0 +1,99 @@
+{% extends "cacsremoteservice/views/layouts/master.html" %}
+
+{% block scripts %}
+<script>
+  if(typeof navigator !== 'undefined' && (/MSIE/.test(navigator.userAgent) || /Trident\//.test(navigator.appVersion))) {
+  $('#home-notification-box').html('<div class="alert alert-warning"><p><strong>Unsupported Browser:</strong> Internet Explorer is not supported by CodeScene. Many visualizations won\'t work unless you switch to Edge, Chrome, Firefox, or any other modern browser.</p></div>');
+  }
+  {% comment %}
+  TODO: we need to add these permissions params to the js
+  codescene.views.home.init("{{ view-context }}", {canForceAnalysis: {{ can-force-analysis? }}, canConfigureProjects: {{ can-configure-projects? }}});
+  {% endcomment %}
+
+  const context = {
+    viewContext: '{{ view-context }}',
+    planFeatures: {{ feature-flags|json|safe }},
+    permissions: {
+      canCreateProject: {{ can-create-new-project? }},
+    },
+    product: 'enterprise',
+  }
+
+  codescene.views.projectsPage.init(
+    document.getElementById('four-factor-all-projects'),
+    'enterprise',
+    context
+  )
+
+  {% if version-information %}
+    codescene.views.notifications.init({
+        title: `{{ version-information.title }}`,
+        description: `{{ version-information.description|safe }}`,
+        dismissButtonText: 'Acknowledge',
+        dismissButtonId: "btn_version_acknowledge"
+      });
+    $('#btn_version_acknowledge').on('click', function(){
+      $.post( "/version-notification-acknowledge", { version: "{{version-information.version}}"} );
+    });
+
+  {% endif %}
+</script>
+{% endblock %}
+
+{% block main-container %}
+<div class="four-factor-projects-page" id="page-body">
+  <div id="home-notification-box">
+  </div>
+
+  {% if all-projects|empty? %}
+  <div class="no-projects">
+    <h1>Welcome to CodeScene!</h1>
+    <div class="no-projects-content">
+      <div class="content-left"></div>
+      <div class="content-right">
+      {% if can-create-new-project? %}
+        <h3>Start by creating a project</h3>
+        <p>Run a CodeScene analysis to get insights into your project’s Code Health, Knowledge Distribution, Team-Code Alignment and Delivery.</p>
+        <div class="cs-action-button cs-action-button__link">
+          <a data-automation-id="add-new-project"
+            href='{{view-context}}/projects/new'>
+            <span class="cs-action-button__icon cs-action-button__icon--left">
+              <svg width="18" height="18" viewBox="0 0 26 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M13 1v24M1 13h24" stroke="#626A7D" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                </path>
+              </svg>
+            </span>
+            <span class="cs-action-button__label">Create your first project</span>
+          </a>
+        </div>
+      {% else %}
+        <p>There are no projects yet, and you do not have permission to create
+          projects. Login as Administrator or another role with the required privileges
+          to create projects.</p>
+        <p>If you’d like to explore CodeScene, check out these <a href="{{view-context}}/tutorials">tutorials</a>.</p>
+      {% endif %}
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div id="four-factor-all-projects" class="projects-list-container"></div>
+  {% endif %}
+</div>
+<footer id="footer">
+  <div class="license-info">
+  {% ifunequal allowed-authors "0"%}
+  <div class="flex">
+    <div class="active-authors">
+      <a class="active-authors-link" href="/active-authors">Active authors: {{active-authors}}</a>
+    </div>
+    <span>Plan: Enterprise</span>
+  </div>
+  {% else %}
+  Licensed to {{license.username}}. License valid
+  {% endifunequal %}
+  </div>
+  <div class="copyright">
+    Codescene Enterprise ({{codescene-version}}) &copy; 2016-{% now yyyy %}
+  </div>
+</footer>
+{% endblock %}
