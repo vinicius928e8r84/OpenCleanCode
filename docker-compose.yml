@@ -1,6 +1,7 @@
 services:
   codescene:
-    image: codescene/codescene:latest
+    # imagem congelada: NAO use :latest aqui, senao um pull muda a versao
+    image: opencleancode:7.5.20
     container_name: codescene
     ports:
       - "3003:3003"
