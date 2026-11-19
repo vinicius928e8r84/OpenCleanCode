@@ -1,4 +1,4 @@
-# codescene-local-free
+# OpenCleanCode
 
 CodeScene Local (a versão self-hosted, que roda em Docker) rodando **sem licença**:
 sem prazo, sem teto de autores, sem pedir chave.
@@ -32,7 +32,7 @@ bloquear trabalho, e é um dos três que o patch desarma — por isso análise d
 
 ```bash
 git clone <este-repo>
-cd codescene-local-free
+cd OpenCleanCode
 bash install.sh
 docker restart codescene
 ```
