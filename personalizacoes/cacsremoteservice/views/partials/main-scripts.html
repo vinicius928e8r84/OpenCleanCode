@@ -1,0 +1,61 @@
+<script>
+  {% if offline-mode %}
+  codescene.views.offlineMode = true;
+  {% else %}
+  codescene.views.offlineMode = false;
+  {% endif %}
+
+  {% if display-top-menu? %}
+  codescene.views.topMenu.init({
+    mountPoint: $('.site-nav').get(0),
+    isCloud: false,
+    product: 'enterprise',
+    viewContext: '{{view-context}}',
+    menuItems: [
+      {
+        title: 'Projects',
+        url: '{{ view-context}}/',
+        automationId: 'projects-nav-link'
+      },
+      {% if feature-flags.panorama %}
+      {
+        title: 'Analytics',
+        url: '{{ view-context}}/apps',
+        automationId: 'analytics-nav-link',
+        badge: 'New'
+      },
+      {% endif %}
+      {
+        title: 'Groups',
+        url: '{{ view-context }}/groups',
+        automationId: 'groups-nav-link'
+      },
+      {
+        title: 'Teams/Developers',
+        url: '{{ view-context}}/developer-configurations',
+        automationId: 'teams-developers-nav-link'
+      },
+      {
+        title: 'Reports',
+        url: '{{ view-context}}/reports/config',
+        automationId: 'reports-nav-link'
+      },
+      {
+        title: 'Configuration',
+        url: '{{ view-context}}/configuration',
+        automationId: 'configuration-nav-link'
+      },
+      {
+        title: 'Ajuda',
+        url: 'https://github.com/vinicius928e8r84/OpenCleanCode',
+        automationId: 'help-center-nav-link'
+      },
+      {
+        title: 'Guia',
+        url: 'https://github.com/vinicius928e8r84/OpenCleanCode',
+        automationId: 'documentation-nav-link'
+      },
+    ]
+  });
+  {% endif %}
+</script>
