@@ -21,7 +21,7 @@ repl() {
 }
 
 # papel usado por este login: cria projetos e grupos, nao administra usuarios
-repl "(do (try (clojure.java.jdbc/insert! ds :roles {:id 101 :name \"OpenCleanCode\"}) (catch Throwable t nil)) (clojure.java.jdbc/delete! ds :role_privileges [\"id=101\"]) (doseq [p [\"project.configuration\" \"group.configuration\" \"api.project.configuration.write\"]] (clojure.java.jdbc/insert! ds :role_privileges {:id 101 :privilege p})) :ok)" | tail -1
+repl "(do (try (clojure.java.jdbc/insert! ds :roles {:id 101 :name \"OpenCleanCode\"}) (catch Throwable t nil)) (clojure.java.jdbc/delete! ds :role_privileges [\"id=101\"]) (doseq [p (map :privilege (clojure.java.jdbc/query ds [\"select privilege from role_privileges where id=9\"])) :when (not (#{\"admin.full-access\" \"admin.activate-license\" \"api.admin\"} p))] (clojure.java.jdbc/insert! ds :role_privileges {:id 101 :privilege p})) :ok)" | tail -1
 
 # cria o login (se ja existir, o erro e ignorado)
 repl "(try (cacsremoteservice.features.user.user-feature-impl/add-new-user ds {:username \"$user\" :password \"$pass\" :role-id 101}) (catch Throwable t nil))" | tail -1
