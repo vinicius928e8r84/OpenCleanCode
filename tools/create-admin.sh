@@ -1,5 +1,5 @@
 #!/bin/bash
-# Cria um segundo login, isolado, no OpenCleanCode.
+# Cria um segundo login no OpenCleanCode, com permissao de criar projetos e grupos.
 # Uso: bash tools/create-admin.sh [usuario] [senha] [container]
 # Padrao: admin@opencleancode.local / opencleancode / opencleancode
 set -e
@@ -20,10 +20,13 @@ repl() {
   ' _ "$1"
 }
 
-# cria o usuario (se ja existir, o erro e ignorado)
-repl "(try (cacsremoteservice.features.user.user-feature-impl/add-new-user ds {:username \"$user\" :password \"$pass\" :role-id -1}) (catch Throwable t nil))" | tail -1
+# papel usado por este login: cria projetos e grupos, nao administra usuarios
+repl "(do (try (clojure.java.jdbc/insert! ds :roles {:id 101 :name \"OpenCleanCode\"}) (catch Throwable t nil)) (clojure.java.jdbc/delete! ds :role_privileges [\"id=101\"]) (doseq [p [\"project.configuration\" \"group.configuration\" \"api.project.configuration.write\"]] (clojure.java.jdbc/insert! ds :role_privileges {:id 101 :privilege p})) :ok)" | tail -1
 
-# garante a senha e o papel isolado (No Access no nivel raiz)
-repl "(let [u (cacsremoteservice.features.user.user-feature-impl/find-by-user-name ds \"$user\")] (when u (cacsremoteservice.features.user.user-feature-impl/update-password-for ds {:id (:id u) :password \"$pass\"}) (clojure.java.jdbc/delete! ds :auth_provider_role_mapping [\"provider_role_name=?\" \"$user\"]) (clojure.java.jdbc/insert! ds :auth_provider_role_mapping {:provider_id 1 :codescene_role_id -1 :provider_role_name \"$user\"})))" | tail -1
+# cria o login (se ja existir, o erro e ignorado)
+repl "(try (cacsremoteservice.features.user.user-feature-impl/add-new-user ds {:username \"$user\" :password \"$pass\" :role-id 101}) (catch Throwable t nil))" | tail -1
 
-echo "login isolado pronto: $user"
+# garante a senha e o papel
+repl "(let [u (cacsremoteservice.features.user.user-feature-impl/find-by-user-name ds \"$user\")] (when u (cacsremoteservice.features.user.user-feature-impl/update-password-for ds {:id (:id u) :password \"$pass\"}) (clojure.java.jdbc/delete! ds :auth_provider_role_mapping [\"provider_role_name=?\" \"$user\"]) (clojure.java.jdbc/insert! ds :auth_provider_role_mapping {:provider_id 1 :codescene_role_id 101 :provider_role_name \"$user\"})))" | tail -1
+
+echo "login pronto: $user"

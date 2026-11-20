@@ -30,8 +30,9 @@ O instalador cria um segundo login, separado da sua conta:
 - usuário: `admin@opencleancode.local`
 - senha: `opencleancode`
 
-Ele entra no sistema e fica isolado: não vê os projetos da sua conta e não mexe nos
-usuários. Para outro nome ou senha: `ADMIN_USER=... ADMIN_PASS=... bash install.sh`.
+Ele cria projetos e grupos, não administra usuários. Como o programa mostra a lista
+completa de projetos para quem tem permissão de criar, ele enxerga os projetos que já
+existem. Para outro nome ou senha: `ADMIN_USER=... ADMIN_PASS=... bash install.sh`.
 
 Troque a senha em Configuration assim que entrar.
 
