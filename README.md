@@ -25,16 +25,15 @@ docker restart opencleancode
 
 Requisitos: Docker. A porta é a 3003.
 
-O instalador cria um acesso de administrador para o primeiro login:
+O instalador cria um segundo login, separado da sua conta:
 
 - usuário: `admin@opencleancode.local`
 - senha: `opencleancode`
 
-Troque a senha no primeiro acesso, em Configuration > usuário. Para outro usuário ou
-senha: `ADMIN_USER=... ADMIN_PASS=... bash install.sh`.
+Ele entra no sistema e fica isolado: não vê os projetos da sua conta e não mexe nos
+usuários. Para outro nome ou senha: `ADMIN_USER=... ADMIN_PASS=... bash install.sh`.
 
-Se o servidor já existia antes, o administrador é criado do mesmo jeito e a senha
-padrão passa a valer.
+Troque a senha em Configuration assim que entrar.
 
 ## Conferir
 
