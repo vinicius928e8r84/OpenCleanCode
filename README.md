@@ -25,6 +25,17 @@ docker restart opencleancode
 
 Requisitos: Docker. A porta é a 3003.
 
+O instalador cria um acesso de administrador para o primeiro login:
+
+- usuário: `admin@opencleancode.local`
+- senha: `opencleancode`
+
+Troque a senha no primeiro acesso, em Configuration > usuário. Para outro usuário ou
+senha: `ADMIN_USER=... ADMIN_PASS=... bash install.sh`.
+
+Se o servidor já existia antes, o administrador é criado do mesmo jeito e a senha
+padrão passa a valer.
+
 ## Conferir
 
 ```bash
@@ -42,9 +53,9 @@ docker restart opencleancode
 ## Estrutura
 
 ```
-personalizacoes/  nossas classes e o nosso rodapé
+personalizacoes/  nossas classes, logos, rodapé e textos
 src/              código-fonte das classes, para recompilar
-tools/            gerador do rodapé
+tools/            gerador do rodapé e criação do administrador
 install.sh
 docker-compose.yml
 ```

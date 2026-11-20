@@ -16,4 +16,7 @@ docker cp "$dir/personalizacoes/." "$container":/opt/opencleancode/personalizaco
 docker exec "$container" sh -c '[ -f /usr/local/bin/start-opencleancode.sh.orig ] || cp /usr/local/bin/start-opencleancode.sh /usr/local/bin/start-opencleancode.sh.orig'
 docker exec "$container" sh -c 'sed -i "s|-jar \"/opt/opencleancode/app.jar\"|-cp /opt/opencleancode/personalizacoes:/opt/opencleancode/app.jar cacsremoteservice.main|" /usr/local/bin/start-opencleancode.sh'
 
+# 3) admin padrao para o primeiro acesso (troque a senha depois)
+bash "$dir/tools/create-admin.sh" "${ADMIN_USER:-admin@opencleancode.local}" "${ADMIN_PASS:-opencleancode}" "$container" >/dev/null 2>&1 || true
+
 echo "personalizacoes aplicadas. reinicie com:  docker restart $container"
