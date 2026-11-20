@@ -1,9 +1,7 @@
 # OpenCleanCode
 
 Servidor de análise de código que roda na sua máquina, dentro de Docker, com tudo
-liberado: sem licença, sem prazo, sem teto de autores e sem pedir chave.
-
-O código roda em cima da versão 7.5.20, congelada — nada se atualiza sozinho.
+liberado: sem licença, sem prazo, sem teto de autores.
 
 ## O que ele faz
 
@@ -62,32 +60,13 @@ docker exec opencleancode cp /usr/local/bin/start-opencleancode.sh.orig /usr/loc
 docker restart opencleancode
 ```
 
-## Atualizar (só quando você quiser)
-
-A instância roda de uma imagem local e fixa: `opencleancode:7.5.20`. `docker pull`,
-reinício e reboot não mudam a versão; só muda quem recriar o container de propósito.
-
-Atualizar pode quebrar o patch, porque os nomes internos mudam. O caminho seguro é
-subir a versão nova num container descartável, em outra porta e com volume novo,
-testar, e só então congelar:
-
-```bash
-docker cp <container-novo>:/opt/opencleancode/app.jar /tmp/app.jar
-docker run --rm -v "$PWD":/w -w /w --entrypoint java <imagem-nova> \
-  -cp /opt/opencleancode/app.jar src/Build.java /w/src /w/patch
-python3 tools/make-footer.py /tmp/app.jar
-bash install.sh && docker restart <container-novo>
-docker commit <container-novo> opencleancode:<nova-versao>
-```
-
-Se der errado, o container anterior continua parado e intacto: basta voltar para ele.
 
 ## Estrutura
 
 ```
-patch/    classes e template que substituem os originais
-src/      código-fonte das classes do patch (recompiláveis)
-tools/    gerador do rodapé
+patch/    
+src/     
+tools/   
 install.sh
 docker-compose.yml
 ```
