@@ -1,18 +1,19 @@
 #!/bin/bash
-# Instala o patch no container opencleancode (precisa estar rodando).
-# Idempotente. Rode de novo depois de recriar o container ou de atualizar a imagem.
+# Aplica as personalizacoes no container opencleancode (precisa estar rodando).
+# Seguro de rodar quantas vezes quiser. Rode de novo depois de recriar o container
+# ou de trocar a versao.
 set -e
 dir="$(cd "$(dirname "$0")" && pwd)"
 container="${1:-opencleancode}"
 
 docker exec "$container" test -f /opt/opencleancode/app.jar
 
-# 1) classes e templates que substituem os originais
-docker exec "$container" mkdir -p /opt/opencleancode/patch
-docker cp "$dir/patch/." "$container":/opt/opencleancode/patch/
+# 1) classes e templates nossos
+docker exec "$container" mkdir -p /opt/opencleancode/personalizacoes
+docker cp "$dir/personalizacoes/." "$container":/opt/opencleancode/personalizacoes/
 
-# 2) a JVM carrega nosso diretorio antes do jar (classes e recursos)
+# 2) o Java passa a carregar a nossa pasta antes do aplicativo
 docker exec "$container" sh -c '[ -f /usr/local/bin/start-opencleancode.sh.orig ] || cp /usr/local/bin/start-opencleancode.sh /usr/local/bin/start-opencleancode.sh.orig'
-docker exec "$container" sh -c 'sed -i "s|-jar \"/opt/opencleancode/app.jar\"|-cp /opt/opencleancode/patch:/opt/opencleancode/app.jar cacsremoteservice.main|" /usr/local/bin/start-opencleancode.sh'
+docker exec "$container" sh -c 'sed -i "s|-jar \"/opt/opencleancode/app.jar\"|-cp /opt/opencleancode/personalizacoes:/opt/opencleancode/app.jar cacsremoteservice.main|" /usr/local/bin/start-opencleancode.sh'
 
-echo "patch aplicado. reinicie com:  docker restart $container"
+echo "personalizacoes aplicadas. reinicie com:  docker restart $container"

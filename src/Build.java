@@ -7,12 +7,12 @@ import java.util.stream.Stream;
 
 /**
  * Compila os .java de src/ contra o jar do OpenCleanCode, gerando os .class que vao
- * para patch/cacsremoteservice/features/license/.
+ * para personalizacoes/cacsremoteservice/features/license/.
  *
  * Roda dentro da imagem do OpenCleanCode (tem javac):
  *   docker run --rm -v "$PWD":/w -w /w --entrypoint java \
  *     opencleancode:7.5.20 -cp /opt/opencleancode/app.jar \
- *     src/Build.java /w/src /w/patch
+ *     src/Build.java /w/src /w/personalizacoes
  */
 public class Build {
     public static void main(String[] a) throws Exception {
