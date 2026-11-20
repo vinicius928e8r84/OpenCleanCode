@@ -6,7 +6,7 @@ import os
 import sys
 import zipfile
 
-jar = sys.argv[1] if len(sys.argv) > 1 else "/tmp/cs.jar"
+jar = sys.argv[1] if len(sys.argv) > 1 else "/tmp/app.jar"
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "patch",
                    "cacsremoteservice", "views", "four-factor-home-view.html")
 

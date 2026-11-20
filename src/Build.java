@@ -6,19 +6,19 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 /**
- * Compila os .java de src/ contra o jar do CodeScene, gerando os .class que vao
+ * Compila os .java de src/ contra o jar do OpenCleanCode, gerando os .class que vao
  * para patch/cacsremoteservice/features/license/.
  *
- * Roda dentro da imagem do CodeScene (tem javac):
+ * Roda dentro da imagem do OpenCleanCode (tem javac):
  *   docker run --rm -v "$PWD":/w -w /w --entrypoint java \
- *     codescene/codescene -cp /opt/codescene/codescene-enterprise-edition.standalone.jar \
+ *     opencleancode:7.5.20 -cp /opt/opencleancode/app.jar \
  *     src/Build.java /w/src /w/patch
  */
 public class Build {
     public static void main(String[] a) throws Exception {
         Path srcDir = Paths.get(a[0]);
         String outDir = a[1];
-        String jar = "/opt/codescene/codescene-enterprise-edition.standalone.jar";
+        String jar = "/opt/opencleancode/app.jar";
         JavaCompiler c = ToolProvider.getSystemJavaCompiler();
         if (c == null) {
             System.err.println("sem javac nesta JVM");

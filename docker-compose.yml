@@ -1,24 +1,24 @@
 services:
-  codescene:
-    # imagem congelada: NAO use :latest aqui, senao um pull muda a versao
+  opencleancode:
+    # imagem local congelada: nao use :latest aqui, senao um pull muda a versao
     image: opencleancode:7.5.20
-    container_name: codescene
+    container_name: opencleancode
     ports:
       - "3003:3003"
     volumes:
-      - codescene:/codescene
-      - ./local_repos:/codescene/local_clones
+      - opencleancode:/opencleancode
+      - ./local_repos:/opencleancode/local_clones
     environment:
       CODESCENE_IN_DOCKER: "true"
-      CODESCENE_DB_PATH: /codescene/codescene
-      CODESCENE_ANALYSIS_RESULTS_ROOT: /codescene/analysis
-      CODESCENE_CLONED_REPOSITORIES_ROOT: /codescene/repos
-      CODESCENE_CODE_COVERAGE_DATA_DIR: /codescene/code-coverage-data
-      DIAGNOSTICS_DIR: /codescene/diagnostics
+      CODESCENE_DB_PATH: /opencleancode/opencleancode
+      CODESCENE_ANALYSIS_RESULTS_ROOT: /opencleancode/analysis
+      CODESCENE_CLONED_REPOSITORIES_ROOT: /opencleancode/repos
+      CODESCENE_CODE_COVERAGE_DATA_DIR: /opencleancode/code-coverage-data
+      DIAGNOSTICS_DIR: /opencleancode/diagnostics
       CODESCENE_TIMEZONE: UTC
-      HOST_CLONED_REPOSITORIES_ROOT: /codescene/local_clones
-      LOCAL_CLONED_REPOSITORIES_ROOT: /codescene/local_clones
+      HOST_CLONED_REPOSITORIES_ROOT: /opencleancode/local_clones
+      LOCAL_CLONED_REPOSITORIES_ROOT: /opencleancode/local_clones
     restart: unless-stopped
 
 volumes:
-  codescene:
+  opencleancode:

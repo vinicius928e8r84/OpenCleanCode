@@ -1,17 +1,18 @@
 #!/bin/bash
-# Instala o patch no container "codescene" (precisa estar rodando).
+# Instala o patch no container opencleancode (precisa estar rodando).
 # Idempotente. Rode de novo depois de recriar o container ou de atualizar a imagem.
 set -e
 dir="$(cd "$(dirname "$0")" && pwd)"
+container="${1:-opencleancode}"
 
-docker exec codescene test -f /opt/codescene/codescene-enterprise-edition.standalone.jar
+docker exec "$container" test -f /opt/opencleancode/app.jar
 
 # 1) classes e templates que substituem os originais
-docker exec codescene mkdir -p /opt/codescene/patch
-docker cp "$dir/patch/." codescene:/opt/codescene/patch/
+docker exec "$container" mkdir -p /opt/opencleancode/patch
+docker cp "$dir/patch/." "$container":/opt/opencleancode/patch/
 
 # 2) a JVM carrega nosso diretorio antes do jar (classes e recursos)
-docker exec codescene sh -c '[ -f /usr/local/bin/start-codescene.sh.orig ] || cp /usr/local/bin/start-codescene.sh /usr/local/bin/start-codescene.sh.orig'
-docker exec codescene sh -c 'sed -i "s|-jar \"/opt/codescene/codescene-enterprise-edition.standalone.jar\"|-cp /opt/codescene/patch:/opt/codescene/codescene-enterprise-edition.standalone.jar cacsremoteservice.main|" /usr/local/bin/start-codescene.sh'
+docker exec "$container" sh -c '[ -f /usr/local/bin/start-opencleancode.sh.orig ] || cp /usr/local/bin/start-opencleancode.sh /usr/local/bin/start-opencleancode.sh.orig'
+docker exec "$container" sh -c 'sed -i "s|-jar \"/opt/opencleancode/app.jar\"|-cp /opt/opencleancode/patch:/opt/opencleancode/app.jar cacsremoteservice.main|" /usr/local/bin/start-opencleancode.sh'
 
-echo "patch aplicado. reinicie com:  docker restart codescene"
+echo "patch aplicado. reinicie com:  docker restart $container"

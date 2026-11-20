@@ -3,7 +3,7 @@
 {% block scripts %}
 <script>
   if(typeof navigator !== 'undefined' && (/MSIE/.test(navigator.userAgent) || /Trident\//.test(navigator.appVersion))) {
-  $('#home-notification-box').html('<div class="alert alert-warning"><p><strong>Unsupported Browser:</strong> Internet Explorer is not supported by CodeScene. Many visualizations won\'t work unless you switch to Edge, Chrome, Firefox, or any other modern browser.</p></div>');
+  $('#home-notification-box').html('<div class="alert alert-warning"><p><strong>Unsupported Browser:</strong> Internet Explorer is not supported by OpenCleanCode. Many visualizations won\'t work unless you switch to Edge, Chrome, Firefox, or any other modern browser.</p></div>');
   }
   {% comment %}
   TODO: we need to add these permissions params to the js
@@ -47,13 +47,13 @@
 
   {% if all-projects|empty? %}
   <div class="no-projects">
-    <h1>Welcome to CodeScene!</h1>
+    <h1>Welcome to OpenCleanCode!</h1>
     <div class="no-projects-content">
       <div class="content-left"></div>
       <div class="content-right">
       {% if can-create-new-project? %}
         <h3>Start by creating a project</h3>
-        <p>Run a CodeScene analysis to get insights into your project’s Code Health, Knowledge Distribution, Team-Code Alignment and Delivery.</p>
+        <p>Run an OpenCleanCode analysis to get insights into your project’s Code Health, Knowledge Distribution, Team-Code Alignment and Delivery.</p>
         <div class="cs-action-button cs-action-button__link">
           <a data-automation-id="add-new-project"
             href='{{view-context}}/projects/new'>
@@ -70,7 +70,7 @@
         <p>There are no projects yet, and you do not have permission to create
           projects. Login as Administrator or another role with the required privileges
           to create projects.</p>
-        <p>If you’d like to explore CodeScene, check out these <a href="{{view-context}}/tutorials">tutorials</a>.</p>
+        <p>If you’d like to explore OpenCleanCode, check out these <a href="{{view-context}}/tutorials">tutorials</a>.</p>
       {% endif %}
       </div>
     </div>
@@ -93,7 +93,7 @@
   {% endifunequal %}
   </div>
   <div class="copyright">
-    Codescene Enterprise ({{codescene-version}}) &copy; 2016-{% now yyyy %}
+    OpenCleanCode ({{codescene-version}}) &copy; 2016-{% now yyyy %}
   </div>
 </footer>
 {% endblock %}
